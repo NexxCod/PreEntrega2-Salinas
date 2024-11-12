@@ -1,0 +1,11 @@
+.greeting-message {
+    font-size: 2rem;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  @media (max-width: 768px) {
+    .greeting-message {
+      font-size: 1.5rem; 
+    }
+  }
