@@ -1,18 +1,18 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
-
-const Item = ({product}) => {
+function Item({ product }) {
   return (
-    <div className="card" style={{width: "18rem"}}>
-        <img src={product.img} className="card-img-top"/>
-        <div className="card-body">
-            <h2 className="card-title">{product.name}</h2>
-            <p>{product.price}</p>
-            <p>{product.description}</p>
-            <Link to={'/detail'}>Ver detalle</Link>
-        </div>
+    <div className="card h-100">
+      <img src={product.image} className="card-img-top" alt={product.name} />
+      <div className="card-body d-flex flex-column">
+        <h5 className="card-title">{product.name}</h5>
+        <p className="card-text">Precio: ${product.price}</p>
+        <Link to={`/item/${product.id}`} className="btn btn-primary mt-auto">
+          Ver Detalle
+        </Link>
+      </div>
     </div>
-  )
+  );
 }
 
-export default Item
+export default Item;

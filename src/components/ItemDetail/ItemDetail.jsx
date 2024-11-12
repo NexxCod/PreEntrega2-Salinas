@@ -1,40 +1,55 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import ItemCount from "../ItemCount/ItemCount.jsx"
-function ItemDetail({ name, img, description, category, price, stock }) {
-  const [quantity, setQuantity] = useState(0)
+import { useCart } from '../../context/CartContext';
+import { useNavigate } from 'react-router-dom';
+
+function ItemDetail({ product }) {
+    const { cart, addItemToCart, removeItemFromCart } = useCart(); // Accede al carrito desde el contexto
+    const navigate = useNavigate();
   
-   const handleAdd = (cantidad) => {
-    setQuantity(cantidad)
-  }
+    if (!product) return null;
   
-  return (
-    <div className="container">
-      <h2>{name}</h2>
-      <div className="card">
-        <img
-          src={img}
-          style={{ width: 300 }}
-          className="card-img-top"
-          alt={name}
-        />
-        <div className="card-body">
-          <p className="card-text">{description}</p>
-          <p className="card-text">Categoria: {category}</p>
-          <h2 className="card-text">Precio: $ {price}</h2>
-          <h2 className="card-text">Disponible - {stock}</h2>
+    // Verifica si el producto ya está en el carrito
+    const isInCart = cart.some((item) => item.id === product.id);
+  
+    return (
+      <div className="container my-5 item-detail-container">
+        <div className="row">
+          {/* Imagen del producto */}
+          <div className="col-12 col-md-6 mb-4">
+            <img src={product.image} className="img-fluid rounded item-image" alt={product.name} />
+          </div>
+          
+          {/* Detalles del producto */}
+          <div className="col-12 col-md-6">
+            <h2 className="mb-3">{product.name}</h2>
+            <p className="text-muted mb-3">Precio: ${product.price}</p>
+            <p>{product.description}</p>
+            <div className="d-flex flex-column flex-sm-row mt-4">
+              <button
+                onClick={() => addItemToCart(product)}
+                className="btn btn-primary me-2 mb-2 mb-sm-0"
+              >
+                Agregar al carrito
+              </button>
+              {/* Solo muestra el botón de eliminar si el producto está en el carrito */}
+              {isInCart && (
+                <button
+                  onClick={() => removeItemFromCart(product.id)}
+                  className="btn btn-danger me-2 mb-2 mb-sm-0"
+                >
+                  Eliminar del carrito
+                </button>
+              )}
+              <button
+                onClick={() => navigate(-1)}
+                className="btn btn-secondary"
+              >
+                Volver
+              </button>
+            </div>
+          </div>
         </div>
       </div>
+    );
+  }
 
-      <div>
-        {quantity === 0 ? (
-          <ItemCount stock={stock} onAdd={handleAdd} />
-        ) : (
-          <Link to="/cart">Finalizar Compra</Link>
-        )}
-      </div>
-    </div>
-  );
-}
-
-export default ItemDetail
+export default ItemDetail;
